@@ -9,11 +9,35 @@
       --bg:#3e2723; /* coklat tua */
       --paper:#6d4c41; /* kertas surat */
       --accent:#ffcc80;
+      --pink:#ff9eaf;
+      --gold:#ffd700;
     }
     html,body{height:100%;margin:0;font-family:Georgia, serif;background:var(--bg);color:#fff;overflow:hidden}
+    
+    /* Efek bintang di latar belakang */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      animation: twinkle 4s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
     /* COLLAGE (container foto) */
     .collage{
-      position:fixed;inset:0;z-index:0;pointer-events:none; /* foto di belakang, tapi tetap hoverable via pointer-events toggled per-image */
+      position:fixed;inset:0;z-index:2;pointer-events:none;
     }
     .collage .photo{
       position:absolute;
@@ -28,6 +52,34 @@
       pointer-events:auto;
       border:6px solid rgba(255,255,255,0.06); /* polaroid-like edge */
     }
+    
+    /* Efek glitter pada foto */
+    .collage .photo::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, var(--gold), var(--pink), var(--gold));
+      border-radius: 10px;
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      filter: blur(5px);
+    }
+    
+    .collage .photo:hover::before {
+      opacity: 0.7;
+      animation: glitter 1.5s infinite linear;
+    }
+    
+    @keyframes glitter {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
     .collage .photo:hover{
       transform:translateY(-8px) scale(1.12);
       box-shadow:0 18px 30px rgba(0,0,0,0.7);
@@ -48,28 +100,101 @@
       user-select:none;
       animation: bounce 1.2s infinite;
       filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+      position: relative;
     }
+    
+    /* Efek cahaya pada hadiah */
+    .gift::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0) 70%);
+      border-radius: 50%;
+      z-index: -1;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.05); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.7; }
+    }
+    
     @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 
     .hint{
       margin-top:12px;color:#ffe9cf;font-size:18px;
+      animation: fadeInOut 3s infinite;
+    }
+    
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    /* Emoji romantis melayang */
+    .floating-emoji {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      animation: float-up 4s ease-in-out infinite;
+      z-index: 2500;
+      pointer-events: none;
+    }
+    
+    @keyframes float-up {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
     }
 
     /* LETTER */
     .overlay{
       position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
       background:rgba(0,0,0,0.45);z-index:3500;backdrop-filter: blur(2px);
-      display:none; /* tampil setelah buka */
+      display:none;
     }
     .letter{
       width:86%;max-width:760px;background:var(--paper);color:#fff3e0;padding:30px;border-radius:12px;
       box-shadow:0 18px 40px rgba(0,0,0,0.6);transform-origin:center;animation:openLetter .8s ease forwards;
+      position: relative;
+      overflow: hidden;
     }
+    
+    /* Efek dekorasi pada surat */
+    .letter::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, var(--gold), var(--pink), var(--gold));
+      border-radius: 15px;
+      z-index: -1;
+      opacity: 0.5;
+    }
+    
+    /* Stempel hati pada surat */
+    .letter::after {
+      content: '💕';
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 40px;
+      opacity: 0.3;
+      transform: rotate(15deg);
+    }
+    
     @keyframes openLetter{
       from{transform:translateY(10vh) scale(.9) rotateX(12deg);opacity:0}
       to{transform:translateY(0) scale(1) rotateX(0);opacity:1}
     }
-    .letter h1{color:var(--accent);margin:0 0 12px 0;font-size:28px}
+    .letter h1{color:var(--accent);margin:0 0 12px 0;font-size:28px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);}
     .letter p{margin:10px 0;line-height:1.6;font-size:16px;color:#fff3e0;text-align:justify}
 
     /* hearts falling */
@@ -79,7 +204,14 @@
       z-index:4000;
     }
     @keyframes fall{
-      to{transform:translateY(110vh);opacity:0}
+      to{transform:translateY(110vh)opacity:0}
+    }
+    
+    /* Variasi hati jatuh */
+    .heart-variant {
+      position:fixed;top:-30px;font-size:22px;pointer-events:none;
+      animation: fall linear forwards;
+      z-index:4000;
     }
 
     /* small responsive tweak */
@@ -91,6 +223,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Efek bintang di latar belakang -->
+  <div class="stars" id="stars"></div>
 
   <!-- collaged photos will be appended here by JS -->
   <div class="collage" id="collage"></div>
@@ -105,7 +240,7 @@
   <div class="overlay" id="overlay">
     <div class="letter" id="letter">
       <h1>Selamat Ulang Tahun, Irenekamila Putri 🤎</h1>
-   <p>
+        <p>
     Hari ini, dunia terasa lebih indah… karena seseorang yang paling berharga di hidupku dilahirkan.
     Irenekamila putri, kamu bukan cuma perempuan cantik dengan senyum kamu yang selalu bikin aku jatuh hati,
     tapi juga sosok yang selalu memberi warna di hari-hariku.
@@ -156,6 +291,35 @@ const filenames = [
 
 // LIMIT jumlah foto ditampilkan (ambil max 10)
 const MAX_PHOTOS = 10;
+
+// Buat efek bintang di latar belakang
+function createStars() {
+  const starsContainer = document.getElementById('stars');
+  const starCount = 100;
+  
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    
+    // Random position
+    const left = Math.random() * 100;
+    const top = Math.random() * 100;
+    
+    // Random size
+    const size = Math.random() * 3;
+    
+    // Random animation delay
+    const delay = Math.random() * 4;
+    
+    star.style.left = `${left}%`;
+    star.style.top = `${top}%`;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.animationDelay = `${delay}s`;
+    
+    starsContainer.appendChild(star);
+  }
+}
 
 // utility: coba preload image, resolve jika exist
 function testImage(src){
@@ -231,6 +395,37 @@ function placePhoto(src, index){
   }
 })();
 
+// Buat emoji romantis melayang di sekitar hadiah
+function createFloatingEmojis() {
+  const emojis = ['💖', '🌹', '💕', '✨', '🌟', '💗', '💓', '💝'];
+  const center = document.querySelector('.center');
+  
+  setInterval(() => {
+    if (document.getElementById('startScreen').style.display !== 'none') {
+      const emoji = document.createElement('div');
+      emoji.className = 'floating-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      
+      // Posisi di sekitar hadiah
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 100 + Math.random() * 50;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+      
+      emoji.style.left = `calc(50% + ${x}px)`;
+      emoji.style.top = `calc(50% + ${y}px)`;
+      emoji.style.animationDelay = `${Math.random() * 2}s`;
+      
+      center.appendChild(emoji);
+      
+      // Hapus emoji setelah animasi selesai
+      setTimeout(() => {
+        emoji.remove();
+      }, 4000);
+    }
+  }, 800);
+}
+
 // Open letter when gift clicked
 giftBtn.addEventListener('click', () => {
   document.getElementById('startScreen').style.display = 'none';
@@ -252,8 +447,9 @@ overlay.addEventListener('click', (e) => {
   }
 });
 
-// spawn hearts
+// spawn hearts with variations
 function spawnHearts(){
+  const hearts = ['💖', '💕', '💗', '💓', '💝'];
   const interval = setInterval(() => {
     const h = document.createElement('div');
     h.className = 'heart';
@@ -261,11 +457,17 @@ function spawnHearts(){
     h.style.fontSize = (16 + Math.random()*18) + 'px';
     h.style.animationDuration = (3 + Math.random()*2) + 's';
     h.style.opacity = 0.95;
-    h.innerHTML = '💖';
+    h.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
     document.body.appendChild(h);
     setTimeout(()=>h.remove(), 5200);
   }, 360);
 }
+
+// Inisialisasi efek bintang dan emoji melayang saat halaman dimuat
+window.addEventListener('load', () => {
+  createStars();
+  createFloatingEmojis();
+});
 </script>
 </body>
 </html>
